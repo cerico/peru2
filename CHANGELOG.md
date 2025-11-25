@@ -1,9 +1,9 @@
-# 1.1.0 (2025-11-25)
+# 0.1.0 (2025-11-25)
 
 
 ### Features
 
-* initialized repo ([b945508](https://github.com/cerico/peru/commit/b945508ae4241145f704e7635cf0728d4f6a041b))
+* initialized repo ([75b9762](https://github.com/cerico/peru/commit/75b97623451f0e0506e73da114eb2f48602decbb))
 
 
 
