@@ -6,7 +6,7 @@ Lima VM
 
 ```bash
 make          # Show VM status and available commands
-make install  # Install Lima (via Homebrew)
+make info     # Show VM status
 make setup    # Create VM and install dependencies
 make ssh      # Connect to VM
 ```
@@ -16,7 +16,6 @@ make ssh      # Connect to VM
 | Command | Description |
 |---------|-------------|
 | `make info` | Show VM status |
-| `make install` | Install Lima via Homebrew |
 | `make start` | Start the VM |
 | `make stop` | Stop the VM |
 | `make ssh` | SSH into the VM |
