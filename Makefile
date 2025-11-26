@@ -1,7 +1,7 @@
-VM_NAME := lima
+VM_NAME := $(shell basename $(CURDIR))
 VM_USER := $(shell whoami)
 
-.PHONY: info install start stop ssh setup destroy
+.PHONY: info start stop ssh setup destroy limas
 
 .DEFAULT_GOAL := _tldr
 
@@ -19,32 +19,14 @@ info:
 	fi
 	@echo ""
 
-install:
-	@echo "Installing Lima..."
-	@if command -v limactl >/dev/null 2>&1; then \
-		echo "✓ Lima already installed"; \
-		limactl --version; \
-	else \
-		echo "Installing Lima via Homebrew..."; \
-		brew install lima; \
-		echo "✓ Lima installed"; \
-		limactl --version; \
-	fi
+limas:
+	@limactl list
 	@echo ""
-	@echo "Checking for GitHub SSH keys..."
-	@if [ -f ~/.ssh/id_ed25519 ]; then \
-		echo "✓ Found SSH key at ~/.ssh/id_ed25519"; \
-	elif [ -f ~/.ssh/id_rsa ]; then \
-		echo "✓ Found SSH key at ~/.ssh/id_rsa"; \
-	else \
-		echo "✗ No SSH key found"; \
-		echo ""; \
-		echo "Please generate a GitHub SSH key first:"; \
-		echo "  ssh-keygen -t ed25519 -C \"your_email@example.com\""; \
-		echo "  ssh-add ~/.ssh/id_ed25519"; \
-		echo "  Then add it to GitHub: https://github.com/settings/keys"; \
-		exit 1; \
-	fi
+	@echo "Commands:"
+	@echo "  limactl stop <name>     Stop a machine"
+	@echo "  limactl start <name>    Start a machine"
+	@echo "  limactl shell <name>    SSH into a machine"
+	@echo "  limactl delete <name>   Delete a machine"
 
 start:
 	@echo "Starting VM..."
@@ -61,6 +43,27 @@ ssh:
 	@limactl shell $(VM_NAME)
 
 setup:
+	@echo "Checking prerequisites..."
+	@if command -v limactl >/dev/null 2>&1; then \
+		echo "✓ Lima already installed"; \
+	else \
+		echo "Installing Lima via Homebrew..."; \
+		brew install lima; \
+		echo "✓ Lima installed"; \
+	fi
+	@if [ -f ~/.ssh/id_ed25519 ]; then \
+		echo "✓ Found SSH key at ~/.ssh/id_ed25519"; \
+	elif [ -f ~/.ssh/id_rsa ]; then \
+		echo "✓ Found SSH key at ~/.ssh/id_rsa"; \
+	else \
+		echo "✗ No SSH key found"; \
+		echo ""; \
+		echo "Please generate a GitHub SSH key first:"; \
+		echo "  ssh-keygen -t ed25519 -C \"your_email@example.com\""; \
+		echo "  ssh-add ~/.ssh/id_ed25519"; \
+		echo "  Then add it to GitHub: https://github.com/settings/keys"; \
+		exit 1; \
+	fi
 	@if ! limactl list 2>/dev/null | grep -q $(VM_NAME); then \
 		echo "VM not found. Creating VM first..."; \
 		echo ""; \
